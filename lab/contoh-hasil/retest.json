@@ -1,0 +1,326 @@
+{
+  "timestamp": "2026-09-26T01:58:02.348335+00:00",
+  "postgres_version": "17.11 (Debian 17.11-1.pgdg12+2)",
+  "passed": 51,
+  "total": 51,
+  "tests": [
+    {
+      "test": "vulnerable: unauthenticated access",
+      "passed": true,
+      "actual": 401
+    },
+    {
+      "test": "vulnerable: normal own invoices",
+      "passed": true,
+      "actual": [
+        "INV-001",
+        "INV-003"
+      ]
+    },
+    {
+      "test": "vulnerable: SQL injection",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "invoice_ids": [
+          "INV-001",
+          "INV-002",
+          "INV-003"
+        ]
+      }
+    },
+    {
+      "test": "vulnerable: cross-customer object access",
+      "passed": true,
+      "actual": 200
+    },
+    {
+      "test": "vulnerable: own object access",
+      "passed": true,
+      "actual": 200
+    },
+    {
+      "test": "vulnerable: apostrophe exposes bug",
+      "passed": true,
+      "actual": 500
+    },
+    {
+      "test": "vulnerable: runtime role and TLS",
+      "passed": true,
+      "actual": {
+        "role": "lab_admin",
+        "ssl": false,
+        "tls_version": null
+      }
+    },
+    {
+      "test": "vulnerable: deterministic error",
+      "passed": true,
+      "actual": 500
+    },
+    {
+      "test": "vulnerable: customer B own invoice",
+      "passed": true,
+      "actual": 200
+    },
+    {
+      "test": "vulnerable: reverse object access",
+      "passed": true,
+      "actual": 200
+    },
+    {
+      "test": "query-fixed: unauthenticated access",
+      "passed": true,
+      "actual": 401
+    },
+    {
+      "test": "query-fixed: normal own invoices",
+      "passed": true,
+      "actual": [
+        "INV-001",
+        "INV-003"
+      ]
+    },
+    {
+      "test": "query-fixed: SQL injection",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "invoice_ids": []
+      }
+    },
+    {
+      "test": "query-fixed: cross-customer object access",
+      "passed": true,
+      "actual": 200
+    },
+    {
+      "test": "query-fixed: own object access",
+      "passed": true,
+      "actual": 200
+    },
+    {
+      "test": "query-fixed: apostrophe works",
+      "passed": true,
+      "actual": [
+        "INV-003"
+      ]
+    },
+    {
+      "test": "query-fixed: runtime role and TLS",
+      "passed": true,
+      "actual": {
+        "role": "lab_admin",
+        "ssl": false,
+        "tls_version": null
+      }
+    },
+    {
+      "test": "query-fixed: deterministic error",
+      "passed": true,
+      "actual": 500
+    },
+    {
+      "test": "query-fixed: customer B own invoice",
+      "passed": true,
+      "actual": 200
+    },
+    {
+      "test": "query-fixed: reverse object access",
+      "passed": true,
+      "actual": 200
+    },
+    {
+      "test": "hardened: unauthenticated access",
+      "passed": true,
+      "actual": 401
+    },
+    {
+      "test": "hardened: normal own invoices",
+      "passed": true,
+      "actual": [
+        "INV-001",
+        "INV-003"
+      ]
+    },
+    {
+      "test": "hardened: SQL injection",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "invoice_ids": []
+      }
+    },
+    {
+      "test": "hardened: cross-customer object access",
+      "passed": true,
+      "actual": 404
+    },
+    {
+      "test": "hardened: own object access",
+      "passed": true,
+      "actual": 200
+    },
+    {
+      "test": "hardened: apostrophe works",
+      "passed": true,
+      "actual": [
+        "INV-003"
+      ]
+    },
+    {
+      "test": "hardened: runtime role and TLS",
+      "passed": true,
+      "actual": {
+        "role": "app_runtime",
+        "ssl": true,
+        "tls_version": "TLSv1.3"
+      }
+    },
+    {
+      "test": "hardened: deterministic error",
+      "passed": true,
+      "actual": 500
+    },
+    {
+      "test": "hardened: public error sanitization",
+      "passed": true,
+      "actual": {
+        "error": "Terjadi kesalahan internal",
+        "request_id": "9c2230af-e06f-4d69-aec8-f2e800b66afb"
+      }
+    },
+    {
+      "test": "hardened: log correlation",
+      "passed": true,
+      "actual": [
+        {
+          "time": "2026-09-26T01:58:01.427934+00:00",
+          "mode": "hardened",
+          "request_id": "9c2230af-e06f-4d69-aec8-f2e800b66afb",
+          "event": "database_error",
+          "customer": "A",
+          "sqlstate": "22012"
+        }
+      ]
+    },
+    {
+      "test": "hardened: logs exclude secrets and raw payload",
+      "passed": true,
+      "actual": "checked secret and payload absence"
+    },
+    {
+      "test": "hardened: cookie flags",
+      "passed": true,
+      "actual": "HttpOnly and SameSite=Strict"
+    },
+    {
+      "test": "hardened: CSRF enforced",
+      "passed": true,
+      "actual": 403
+    },
+    {
+      "test": "hardened: customer B own invoice",
+      "passed": true,
+      "actual": 200
+    },
+    {
+      "test": "hardened: reverse object access",
+      "passed": true,
+      "actual": 404
+    },
+    {
+      "test": "runtime: SELECT allowed",
+      "passed": true,
+      "actual": 3
+    },
+    {
+      "test": "runtime: no administrative flags",
+      "passed": true,
+      "actual": [
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "test": "runtime: no inherited role memberships",
+      "passed": true,
+      "actual": 0
+    },
+    {
+      "test": "runtime: not table owner",
+      "passed": true,
+      "actual": "lab_owner"
+    },
+    {
+      "test": "runtime: UPDATE denied",
+      "passed": true,
+      "actual": {
+        "sqlstate": "42501"
+      }
+    },
+    {
+      "test": "runtime: DELETE denied",
+      "passed": true,
+      "actual": {
+        "sqlstate": "42501"
+      }
+    },
+    {
+      "test": "runtime: CREATE denied",
+      "passed": true,
+      "actual": {
+        "sqlstate": "42501"
+      }
+    },
+    {
+      "test": "runtime: internal schema denied",
+      "passed": true,
+      "actual": {
+        "sqlstate": "42501"
+      }
+    },
+    {
+      "test": "baseline admin: internal schema reachable",
+      "passed": true,
+      "actual": 1
+    },
+    {
+      "test": "TLS: plaintext connection denied",
+      "passed": true,
+      "actual": "connection failed: connection to server at \"172.30.26.10\", port 5432 failed: FATAL:  pg_hba.conf rejects connection for host \"172.30.26.40\", user \"app_runtime\", database \"invoice_lab\", no encryption"
+    },
+    {
+      "test": "TLS: wrong hostname denied",
+      "passed": true,
+      "actual": "connection failed: connection to server at \"172.30.26.10\", port 5432 failed: server certificate for \"db\" does not match host name \"wrong.local\""
+    },
+    {
+      "test": "TLS: wrong CA denied",
+      "passed": true,
+      "actual": "connection failed: connection to server at \"172.30.26.10\", port 5432 failed: SSL error: invalid padding"
+    },
+    {
+      "test": "rotation: old credential works before change",
+      "passed": true,
+      "actual": "connected"
+    },
+    {
+      "test": "rotation: old credential rejected after change",
+      "passed": true,
+      "actual": "connection failed: connection to server at \"172.30.26.10\", port 5432 failed: FATAL:  password authentication failed for user \"app_runtime\""
+    },
+    {
+      "test": "rotation: current credential works",
+      "passed": true,
+      "actual": "connected"
+    },
+    {
+      "test": "rotation: application reconnects",
+      "passed": true,
+      "actual": 200
+    }
+  ]
+}

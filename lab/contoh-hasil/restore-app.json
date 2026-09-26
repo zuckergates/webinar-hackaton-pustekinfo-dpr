@@ -1,0 +1,31 @@
+{
+  "database": "invoice_restore_20260926_015805",
+  "passed": true,
+  "tests": [
+    {
+      "test": "restore application login",
+      "passed": true,
+      "actual": 200
+    },
+    {
+      "test": "restore application own list",
+      "passed": true,
+      "actual": [
+        "INV-001",
+        "INV-003"
+      ]
+    },
+    {
+      "test": "restore application authorization",
+      "passed": true,
+      "actual": 404
+    },
+    {
+      "test": "restore application apostrophe",
+      "passed": true,
+      "actual": [
+        "INV-003"
+      ]
+    }
+  ]
+}

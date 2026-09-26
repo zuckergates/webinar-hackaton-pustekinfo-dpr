@@ -1,0 +1,76 @@
+{
+  "run_id": "db6f89f2-3052-44e5-8604-4673c01f9086",
+  "timestamp": "2026-09-26T02:00:01.052268+00:00",
+  "scenarios": [
+    {
+      "id": "S1",
+      "name": "SQL injection",
+      "passed": true,
+      "actual": {
+        "vulnerable": {
+          "invoice_ids": [
+            "INV-001",
+            "INV-002",
+            "INV-003"
+          ],
+          "normal_own_invoices": 2
+        },
+        "query-fixed": {
+          "invoice_ids": [],
+          "normal_own_invoices": 2
+        },
+        "hardened": {
+          "invoice_ids": [],
+          "normal_own_invoices": 2
+        }
+      }
+    },
+    {
+      "id": "S2",
+      "name": "IDOR",
+      "passed": true,
+      "actual": {
+        "vulnerable": {
+          "foreign_invoice_http": 200,
+          "own_invoice_http": 200
+        },
+        "query-fixed": {
+          "foreign_invoice_http": 200,
+          "own_invoice_http": 200
+        },
+        "hardened": {
+          "foreign_invoice_http": 404,
+          "own_invoice_http": 200
+        }
+      }
+    },
+    {
+      "id": "S3",
+      "name": "Excessive database account privileges",
+      "passed": true,
+      "actual": {
+        "baseline_internal_rows": 1,
+        "baseline_update": "succeeded then rolled back",
+        "runtime_denials": {
+          "read_internal": "42501",
+          "update_invoice": "42501"
+        },
+        "invoice_state_restored": true,
+        "authorized_select_rows": 3,
+        "assumption": "direct database access with a supplied lab account; not web privilege escalation"
+      }
+    },
+    {
+      "id": "S5",
+      "name": "Reuse of old database password",
+      "passed": true,
+      "actual": {
+        "before_rotation": "old password accepted",
+        "after_rotation": "old password rejected",
+        "current_password": "accepted",
+        "application_http": 200,
+        "scope": "new connections only; existing sessions are not revoked by password rotation"
+      }
+    }
+  ]
+}

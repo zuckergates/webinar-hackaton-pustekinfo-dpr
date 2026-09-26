@@ -1,0 +1,7 @@
+{
+  "test": "valid credential from untrusted source 172.30.26.30",
+  "passed": true,
+  "run_id": "db6f89f2-3052-44e5-8604-4673c01f9086",
+  "timestamp": "2026-09-26T02:00:03.843394+00:00",
+  "actual": "connection failed: connection to server at \"172.30.26.10\", port 5432 failed: FATAL:  pg_hba.conf rejects connection for host \"172.30.26.30\", user \"app_runtime\", database \"invoice_lab\", SSL encryption"
+}

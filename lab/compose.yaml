@@ -1,0 +1,125 @@
+name: webinar-invoice-lab
+x-app: &app
+  build: .
+  image: webinar-invoice-app:local
+  restart: "no"
+  depends_on:
+    db:
+      condition: service_healthy
+  volumes:
+    - ./runtime/public:/certs:ro
+    - ./evidence:/evidence
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  healthcheck:
+    test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/session', timeout=2)"]
+    interval: 3s
+    timeout: 3s
+    retries: 20
+services:
+  setup:
+    build: .
+    image: webinar-invoice-app:local
+    profiles: [tools]
+    command: [python, setup_lab.py]
+    volumes:
+      - ./runtime:/runtime
+  db:
+    build: ./db
+    image: webinar-invoice-db:local
+    environment:
+      POSTGRES_DB: invoice_lab
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/bootstrap
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - ./runtime/secrets/bootstrap:/run/secrets/bootstrap:ro
+      - ./runtime/db:/cert-source:ro
+      - ./runtime/init:/docker-entrypoint-initdb.d:ro
+      - ./db/pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
+      - ./evidence:/evidence
+      - ./scripts:/lab-scripts:ro
+    networks:
+      backend:
+        ipv4_address: 172.30.26.10
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U postgres -d invoice_lab"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  vulnerable:
+    <<: *app
+    environment:
+      LAB_MODE: vulnerable
+      DB_PASSWORD_FILE: /run/secrets/db_password
+    volumes:
+      - ./runtime/secrets/lab_admin:/run/secrets/db_password:ro
+      - ./runtime/secrets/session_vulnerable:/run/secrets/session:ro
+      - ./runtime/public:/certs:ro
+      - ./evidence:/evidence
+    ports: ["127.0.0.1:8081:8000"]
+    networks:
+      backend:
+        ipv4_address: 172.30.26.20
+      frontend: {}
+  query-fixed:
+    <<: *app
+    environment:
+      LAB_MODE: query-fixed
+      DB_PASSWORD_FILE: /run/secrets/db_password
+    volumes:
+      - ./runtime/secrets/lab_admin:/run/secrets/db_password:ro
+      - ./runtime/secrets/session_query-fixed:/run/secrets/session:ro
+      - ./runtime/public:/certs:ro
+      - ./evidence:/evidence
+    ports: ["127.0.0.1:8082:8000"]
+    networks:
+      backend:
+        ipv4_address: 172.30.26.21
+      frontend: {}
+  hardened:
+    <<: *app
+    environment:
+      LAB_MODE: hardened
+      DB_PASSWORD_FILE: /run/secrets/db_password
+    volumes:
+      - ./runtime/secrets/runtime_current:/run/secrets/db_password:ro
+      - ./runtime/secrets/session_hardened:/run/secrets/session:ro
+      - ./runtime/public:/certs:ro
+      - ./evidence:/evidence
+    ports: ["127.0.0.1:8083:8000"]
+    networks:
+      backend:
+        ipv4_address: 172.30.26.22
+      frontend: {}
+  tester:
+    <<: *app
+    profiles: [tools]
+    command: [python, tests/retest.py]
+    volumes:
+      - ./runtime/secrets:/run/secrets:ro
+      - ./runtime/public:/certs:ro
+      - ./evidence:/evidence
+    networks:
+      backend:
+        ipv4_address: 172.30.26.40
+  untrusted:
+    <<: *app
+    profiles: [tools]
+    command: [python, tests/network_probe.py]
+    volumes:
+      - ./runtime/secrets/runtime_current:/run/secrets/runtime_current:ro
+      - ./runtime/public:/certs:ro
+      - ./evidence:/evidence
+    networks:
+      backend:
+        ipv4_address: 172.30.26.30
+networks:
+  frontend: {}
+  backend:
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.30.26.0/24
+volumes:
+  dbdata:

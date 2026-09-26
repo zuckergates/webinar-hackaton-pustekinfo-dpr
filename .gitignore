@@ -1,0 +1,46 @@
+# Generated local credentials, certificates and database seed
+/lab/runtime/
+**/.env
+**/.env.*
+*.env
+!**/.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*.dump
+*.jsonl
+*.log
+__pycache__/
+*.py[cod]
+.venv/
+node_modules/
+# Only reviewed sample reports belong in Git
+/lab/evidence/*
+!/lab/evidence/README.md
+# Local packaging and production archives
+*.zip
+*.7z
+/03-Paket-Distribusi/
+/99-Arsip-Produksi/
+.DS_Store
+Thumbs.db
+~$*
+
+# Local review working files
+/.review/
+# Additional local credentials and data exports
+**/.aws/
+**/.ssh/
+**/.kube/
+**/.docker/
+**/credentials.json
+**/service-account*.json
+**/id_rsa*
+**/id_ed25519*
+*.p8
+*.jks
+*.keystore
+*.sqlite
+*.sqlite3
+*.db

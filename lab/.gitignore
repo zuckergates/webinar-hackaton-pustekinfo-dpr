@@ -1,0 +1,5 @@
+runtime/
+evidence/*.jsonl
+evidence/*.dump
+__pycache__/
+.venv/

@@ -1,0 +1,4 @@
+Flask>=3.1.2,<4
+psycopg[binary]>=3.2.10,<4
+cryptography>=46,<49
+requests>=2.32.5,<3
